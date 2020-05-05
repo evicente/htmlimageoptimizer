@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import image_functions
+import help
 import os
 import argparse
 
@@ -17,7 +18,7 @@ def arg_parser():
 
 
 def main():
-    arg_parser()
+    # arg_parser()
     application_menu()
     usr_selection()
 
@@ -61,7 +62,10 @@ def usr_selection():
                 get_folder_options()
                 application_menu()
             elif usr_input == 3:
-                print('You want to ')
+                help_text = help.Help()
+                help_text.help_text()
+                # print('You want to ')
+                application_menu()
             elif usr_input == 4:
                 print('Closing Web Image Manager')
                 break
