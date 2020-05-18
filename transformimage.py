@@ -1,25 +1,5 @@
 #!/usr/bin/env python3
 from PIL import Image
-import os
-
-"""
-Upload width size:
-- 100  pixels
-- 300  pixels
-- 500  pixels
-- 750  pixels
-- 1000 pixels
-- 1500 pixels
-- 2500 pixels
-
-Image Requirements
-File types:
-    - .jpg
-    - .gif
-    - .png
-"""
-
-from PIL import Image
 import pathlib
 
 
