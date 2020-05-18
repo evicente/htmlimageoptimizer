@@ -32,3 +32,4 @@ Color Mode:
     - RGB color mode
 - Color profile
     - sRGB color profile
+https://codeloop.org/how-to-browse-a-file-in-python-tkinter/

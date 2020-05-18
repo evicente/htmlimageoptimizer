@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 from tkinter import *
 from tkinter import ttk
+from tkinter import filedialog
+import os
 
 window = Tk()
 window.geometry('500x200')
@@ -10,6 +12,12 @@ window.configure(bg="#e6e6e6")
 # Create a new style ----------------|
 # -----------------------------------|
 
+# file dialog
+def file_dialog():
+    filename = filedialog.askopenfilename(initialdir= 'C:\\Users\efrai\\Documents\\Development\\Python\\Data',
+    title="Select a File", filetype=(("jpeg files","*.jpg"),("JPEG files", "*.JPEG"),("all files","*.*")))
+    print(filename)
+        
 # create the style object
 s = ttk.Style()
 
@@ -25,6 +33,7 @@ welcome_label = ttk.Label(window, text="Welcome to HTML Image Optimizer")
 input_text_label = ttk.Label(window, text="Please enter image path:")
 input_text = ttk.Entry(window, width=25)
 ok_button = ttk.Button(window, text='OK', style='W.TButton')
+browse_button = ttk.Button(window, text='Browse', command=file_dialog)
 
 print("ok_button.winfo_class() is: ".format(welcome_label.winfo_class()))
 
@@ -33,4 +42,5 @@ welcome_label.grid(column=0, row=0, pady=20, padx=10)
 input_text_label.grid(column=0, row=1, sticky=W, padx=10)
 input_text.grid(column=1, row=1)
 ok_button.grid(column=1, row=2, sticky=E, pady=10)
+browse_button.grid(column=1, row=3)
 window.mainloop()

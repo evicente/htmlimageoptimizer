@@ -19,31 +19,17 @@ File types:
     - .png
 """
 
-
-def open_image(my_image_path, image_format):
-    image_width_values = [100, 300, 500, 750, 1000, 1500, 2500]
-    f, e = os.path.splitext(my_image_path)
-    for value in image_width_values:
-        new_string = '{}_{}{}'.format(f, value, image_format)
-        print(new_string)
-        outfile = new_string
-        if my_image_path != outfile:
-            size = (value, value)
-            try:
-                with Image.open(my_image_path) as im:
-                    im.thumbnail(size)
-                    im.save(outfile)
-            except IOError:
-                print("cannot convert", image_format)
+from PIL import Image
+import pathlib
 
 
-def open_folder(my_folder_path, image_format):
-    for file in os.listdir(my_folder_path):
-        open_image(my_folder_path + '/' + file, image_format)
-
-
-if __name__ == '__main__':
-    folder_path = '/home/efrain/Pictures/Work/TestSet'
-    image_path = '/home/efrain/Pictures/Work/TestSet/DSC_9114.JPG'
-    open_image(image_path, '.jpg')
-    # open_folder(folder_path, '.jpg')
+def transform_image(image_path, dir_out, img_format):
+    size = (128, 128)
+    out_file = pathlib.Path(dir_out).joinpath(pathlib.Path(image_path).stem + img_format)
+    if pathlib.Path(image_path).suffix != img_format:
+        try:
+            with Image.open(image_path) as im:
+                im.thumbnail(size)
+                im.save(out_file)
+        except IOError:
+            print("cannot create thumbnail for", image_path)

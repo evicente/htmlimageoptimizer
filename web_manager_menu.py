@@ -1,93 +1,64 @@
 #!/usr/bin/env python3
-import image_functions
-import help
-import os
-import argparse
-
-
-# image_path = '/home/efrain/Pictures/Work/TestSet/DSC_9114.JPG'
-
-
-def arg_parser():
-    parser = argparse.ArgumentParser(prog="HTML Image Optimizer", description="HTML Image Optimizer")
-    parser.add_argument('-g', '--gui', action='store_true',
-                        help="Pass the '-g' flag to start in gui mode.")
-    args = parser.parse_args()
-    if args.gui:
-        print("GUI mode selected.")
+import sys
+import pathlib
+import transformimage
 
 
 def main():
-    # arg_parser()
-    application_menu()
-    usr_selection()
+    # TODO - Clean up and eliminate redundant code
+    get_version()
+    path_type()
 
+def path_type():
+    output_directory = set_output_directory()
+    image_format = get_image_format()
+    image_path = get_image_path()
+    print(f"Images will be saved on folder: {output_directory}")
+    print(f"In the format: {image_format}")
+    print(f"Image location: {image_path}")
 
-def image_type():
-    selection_menu = {'1': '.jpg', '2': '.gif', '3': '.png'}
-    print('Please select image extension')
-    print('1.{}\n2.{}\n3.{}'.format(selection_menu['1'],
-                                    selection_menu['2'],
-                                    selection_menu['3']))
-    selection = input('Selection: ')
-    if selection in selection_menu.keys():
-        return selection_menu[selection]
-
-
-def get_image_options():
-    path = input('Please enter image path:')
-    if not os.path.exists(path):
-        print('Invalid file folder or image path.')
+    if pathlib.Path(image_path).is_file():
+        transformimage.transform_image(image_path, output_directory, image_format)
+    elif pathlib.Path(image_path).is_dir():
+        for file in pathlib.Path(image_path).iterdir():
+            transformimage.transform_image(file, output_directory, image_format)
     else:
-        image_functions.open_image(path, image_type())
+        print("Please verify the image path")
 
+def get_version():
+    if sys.version_info[0] != 3 and sys.version_info[1] < 6:
+        raise Exception("Program requires Python 3.6 or greater")
+        
 
-def get_folder_options():
-    path = input('Please enter folder path:')
-    if not os.path.exists(path):
-        print('Invalid folder or image path.')
+def set_output_directory():
+    output_directory = pathlib.Path.home().joinpath('Pictures', 'Optimizer')
+    if not output_directory.exists():
+        print(f'Creating output folder at location: {output_directory}')
+        pathlib.Path.mkdir(output_directory)
     else:
-        image_functions.open_image(path, image_type())
+        print(f'Output directory already exist at location: {output_directory}')
+    return output_directory
 
 
-def usr_selection():
-    while True:
-        try:
-            usr_input = int(input('SELECTION:'))
-            if usr_input == 1:
-                get_image_options()
-                application_menu()
-            elif usr_input == 2:
-                print('You want to use bulk transform')
-                get_folder_options()
-                application_menu()
-            elif usr_input == 3:
-                help_text = help.Help()
-                help_text.help_text()
-                # print('You want to ')
-                application_menu()
-            elif usr_input == 4:
-                print('Closing Web Image Manager')
-                break
-            else:
-                print('Invalid selection')
-                application_menu()
-        except ValueError:
-            print('Invalid input')
-            application_menu()
+def get_image_path():
+    usr_path = pathlib.Path(input(f'Please enter image source path:'))
+    if not usr_path.exists():
+        print(f"Path does not exist.")
+    else:
+        return usr_path
 
 
-def application_menu():
-    print('Welcome to Image Manager for Web')
-    print('Please make a selection:')
-    main_menu = '''
-    1. Transform single image
-    2. Bulk transform
-    3. Help
-    4. Exit
-    '''
-    print(main_menu)
+def get_image_format():
+    # TODO - change the selection from tuple to dictionary
+    image_formats = (".jpg", ".gif", ".png")
+    for i, v in enumerate(image_formats):
+        print(f'{i + 1}. {v}')
+    image_format = input(f'Please type image format: ')  
+    if image_format not in image_formats:
+        print(f'Wrong selection')
+    else:
+        return image_format
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
